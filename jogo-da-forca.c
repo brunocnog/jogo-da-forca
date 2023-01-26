@@ -4,8 +4,8 @@
 int main()
 {
     char palavrasecreta[20];
+    //tem a mesma função do printf, contudo ao invez de imprimir na tela, armazena os caracteres no buffer
     sprintf(palavrasecreta, "MELANCIA");
-
 
     int acertou = 0, enforcou = 0, tentativas=0;
     char chutes[26];
@@ -13,20 +13,22 @@ int main()
     do {
 
     for(int i = 0; i <strlen(palavrasecreta); i++){
-            
-            int achou = 0;
 
-            for(int j = 0; j < tentativas; j++){
-                if(chutes[j] == palavrasecreta[i]){
-                    achou = 1;
-                    break;
-                }
+        //teste booleano para o if abaixo   
+        int achou = 0; //false
+
+        //armazena a palavra secreta dentro do array de char chutes
+        for(int j = 0; j < tentativas; j++){
+            if(chutes[j] == palavrasecreta[i]){
+                achou = 1; //true
+                break;
             }
-            if(achou){
-                printf("%c", palavrasecreta[i]);
-            } else {
-                printf("_ ");
-            }
+        }
+        if(achou){
+            printf("%c", palavrasecreta[i]);
+        } else {
+            printf("_ ");
+        }
             
         }
         printf("\n\n");
