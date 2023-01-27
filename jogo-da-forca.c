@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#define 
+
 //declarando variável globais
 char palavrasecreta[20];
 char chutes[26];
@@ -17,9 +19,11 @@ int jachutou(char letra);
 
 void desenhaforca();
 
+int enforcou();
+
 int main(){
     
-    int acertou = 0, enforcou = 0;
+    int acertou = 0;
     
     abertura();
 
@@ -31,8 +35,10 @@ int main(){
 
         chuta();
 
-    } while (!acertou && !enforcou);
-        
+    } while (!acertou && !enforcou());
+    
+    printf("\n");
+    printf("Voce erros mais de 5 vezes. Obrigado por jogar.");
 }
 
 /* FUNÇÕES */
@@ -71,7 +77,7 @@ int jachutou(char letra){
 
 void desenhaforca(){
 
-    printf("Voce ja deu %d chutes\n", tentativas);
+    printf("Voce ja chutou %d vezes, sendo %d/ erradas.\n", tentativas);
 
      //loop para imprimir a palavra secreta
         for(int i = 0; i <strlen(palavrasecreta); i++){
@@ -90,4 +96,31 @@ void escolhepalavra(){
     //tem a mesma função do printf, contudo ao invez de imprimir na tela, armazena os caracteres no buffer
     sprintf(palavrasecreta, "MELANCIA");
 
+}
+
+//função que conta a quantidade de vezes que o jogador erro a letras da palavra secreta
+int enforcou(){
+
+    int erros = 0; //false
+
+    //loop em todos os chutes dados
+    for(int i = 0; i < tentativas; i++){
+        
+        int existe = 0; //false - palavra não encontrada
+
+        //verifica se a letra chutada faz parte da palavra secreta
+        for(int j = 0; j < strlen(palavrasecreta); j++){
+            if(chutes[i] == palavrasecreta[j]){
+                existe = 1; //true - a palavra foi encontrada
+                break;
+            }
+        }
+
+        //se a letra chutada não esta contido na palavra secreta, a variável erros é incrementada em 1
+        if(!existe) erros++;
+
+    }
+
+    //retorna 1 se o limite de erros for maior do que 5. Se for menor, retorna 0
+    return erros >= 5;
 }
