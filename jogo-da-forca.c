@@ -4,6 +4,8 @@
 //protótipo das funções
 void abertura ();
 
+void escolhepalavra(char *palavrasecreta);
+
 void chuta(char chutes[], int* tentativas);
 
 int jachutou(char letra, char *chutes, int tentativas);
@@ -13,15 +15,15 @@ int jachutou(char letra, char *chutes, int tentativas);
 int main(){
 
     char palavrasecreta[20];
-    //tem a mesma função do printf, contudo ao invez de imprimir na tela, armazena os caracteres no buffer
-    sprintf(palavrasecreta, "MELANCIA");
-
+    
     int acertou = 0, enforcou = 0;
 
     char chutes[26];
     int tentativas = 0;
 
     abertura();
+
+    escolhepalavra(palavrasecreta);
         
     do {
 
@@ -81,4 +83,11 @@ void desenhaforca(char *palavrasecreta, char *chutes, int tentativas){
             }
         }                
         printf("\n\n");
+}
+
+void escolhepalavra(char *palavrasecreta){
+
+    //tem a mesma função do printf, contudo ao invez de imprimir na tela, armazena os caracteres no buffer
+    sprintf(palavrasecreta, "MELANCIA");
+
 }
