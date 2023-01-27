@@ -1,35 +1,35 @@
 #include <stdio.h>
 #include <string.h>
 
+//declarando variável globais
+char palavrasecreta[20];
+char chutes[26];
+int tentativas = 0;
+
 //protótipo das funções
 void abertura ();
 
-void escolhepalavra(char *palavrasecreta);
+void escolhepalavra();
 
-void chuta(char chutes[], int* tentativas);
+void chuta();
 
-int jachutou(char letra, char *chutes, int tentativas);
+int jachutou(char letra);
 
- void desenhaforca(char *palavrasecreta, char *chutes, int tentativas);
+void desenhaforca();
 
 int main(){
-
-    char palavrasecreta[20];
     
     int acertou = 0, enforcou = 0;
-
-    char chutes[26];
-    int tentativas = 0;
-
+    
     abertura();
 
-    escolhepalavra(palavrasecreta);
+    escolhepalavra();
         
     do {
 
-        desenhaforca(palavrasecreta, chutes, tentativas);
+        desenhaforca();
 
-        chuta(chutes, &tentativas);
+        chuta();
 
     } while (!acertou && !enforcou);
         
@@ -43,7 +43,7 @@ void abertura (){
     printf("************************\n\n");
 }
 
-void chuta(char chutes[], int* tentativas){    
+void chuta(){    
 
     //imprimei o chute do jogador
     char chute;        
@@ -51,12 +51,12 @@ void chuta(char chutes[], int* tentativas){
     scanf(" %c", &chute);
 
     //array de char para armazenar os chutes do jogador
-    chutes[*tentativas] = chute;
-    (*tentativas)++;
+    chutes[tentativas] = chute;
+    tentativas++;
 }
 
 //verifica se o jogador já chutou determinada letra
-int jachutou(char letra, char *chutes, int tentativas){
+int jachutou(char letra){
 
     int achou = 0;
 
@@ -69,14 +69,14 @@ int jachutou(char letra, char *chutes, int tentativas){
     return achou;
 }
 
-void desenhaforca(char *palavrasecreta, char *chutes, int tentativas){
+void desenhaforca(){
 
     printf("Voce ja deu %d chutes\n", tentativas);
 
      //loop para imprimir a palavra secreta
         for(int i = 0; i <strlen(palavrasecreta); i++){
 
-           if(jachutou(palavrasecreta[i], chutes, tentativas)){
+           if(jachutou(palavrasecreta[i])){
                 printf("%c ", palavrasecreta[i]);
            }else {
                 printf("_ ");
@@ -85,7 +85,7 @@ void desenhaforca(char *palavrasecreta, char *chutes, int tentativas){
         printf("\n\n");
 }
 
-void escolhepalavra(char *palavrasecreta){
+void escolhepalavra(){
 
     //tem a mesma função do printf, contudo ao invez de imprimir na tela, armazena os caracteres no buffer
     sprintf(palavrasecreta, "MELANCIA");
