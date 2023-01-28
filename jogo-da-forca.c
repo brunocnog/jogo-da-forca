@@ -24,6 +24,45 @@ int main(){
     } while (!ganhou() && !enforcou());    
 
     adicionaPalavra();
+
+    if(ganhou()) {
+
+    printf("\nParabens, voce ganhou!\n\n");
+
+    printf("        ___________        \n");
+    printf("       '._==_==_=_.'       \n");
+    printf("        .-\\:     /-.      \n");
+    printf("       | (|:.     |) |     \n");
+    printf("        '-|:.     |-'      \n");
+    printf("         \\::.    /        \n");
+    printf("          '::.   .'        \n");
+    printf("            ) (            \n");
+    printf("          _.' '._          \n");
+    printf("         '-------'         \n\n");
+
+    } else {
+
+        printf("\nPuxa, voce foi enforcado!\n");
+
+        printf("A palavra era ** %s **\n\n", palavraSecreta);
+        printf("    _______________         \n");
+        printf("   /              \\        \n");
+        printf(" /                 \\       \n");
+        printf("//                  \\/\\   \n");
+        printf("\\|   XXXX    XXXX    | /   \n");
+        printf(" |   XXXX    XXXX    |/     \n");
+        printf(" |   XXX     XXX     |      \n");
+        printf(" |                   |      \n");
+        printf(" \\__    XXX       __/      \n");
+        printf(" |\\     XXX      /|        \n");
+        printf(" |  |            | |        \n");
+        printf(" |  I I I I I I I  |        \n");
+        printf(" |   I I I I I I   |        \n");
+        printf(" \\_             _/         \n");
+        printf("   \\_           _/         \n");
+        printf("     \\ _______ /           \n");
+        printf("\n\n");
+    }
 }
 
 /* FUNÇÕES */
@@ -39,6 +78,12 @@ void chuta(){
     char chute;        
     printf("Digite uma letra: ");
     scanf(" %c", &chute);
+
+    if(letraExiste(chute)){
+        printf("Voce acertou: a palavra tem a letra %c.\n\n", chute);
+    } else {
+        printf("Voce errou: a palavra NAO tem a letra %c.\n\n", chute);
+    }
 
     chutes[chutesDados] = chute;
     chutesDados++;
@@ -154,9 +199,7 @@ int ganhou(){
         if(!jachutou(palavraSecreta[i])){
             return 0;
         }
-    }
-    printf("\n");
-    printf("Parabens, voce ganhou!!\n\n");
+    }    
     return 1;
 }
 
