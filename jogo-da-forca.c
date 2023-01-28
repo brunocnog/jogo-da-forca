@@ -11,21 +11,19 @@ char chutes[26];
 int chutesDados = 0;
 
 //função principal
-int main(){
-    
-    int acertou = 0;
-    
+int main(){    
+      
     abertura();
-
     escolhepalavra();
         
     do {
 
         desenhaforca();
-
         chuta();
 
     } while (!ganhou() && !enforcou());    
+
+    adicionaPalavra();
 }
 
 /* FUNÇÕES */
@@ -82,6 +80,8 @@ void escolhepalavra(){
     //sprintf(palavraSecreta, "MELANCIA");
 
     FILE *f;
+
+    //abre o arquivo
     f = fopen("palavras.txt", "r");
     if(f == 0){
         printf("Banco de dados de palavras nao disponivel\n\n");
@@ -137,6 +137,50 @@ int ganhou(){
         }
     }
     printf("\n");
-    printf("Parabens, voce ganhou!!");
+    printf("Parabens, voce ganhou!!\n\n");
     return 1;
 }
+
+//solicita ao jogado, no final do jogo, se ele quer adicionar uma nova palavra no jogo
+void adicionaPalavra() {
+    char quer;
+
+    printf("Adicionar uma nova palavra ao jogo (S/N): ");
+    scanf(" %c", &quer);
+
+    if(quer == 'S') {
+        char novaPalavra[20];
+
+        printf("Digite a nova palavra, em letras maiusculas: ");
+        scanf("%s", novaPalavra);
+
+        FILE *f;
+
+        //abre o arquivo
+        f = fopen("palavras.txt", "r+");
+        if(f == 0){
+            printf("Banco de dados de palavras não disponivel\n\n");
+            exit(1);
+        }
+
+        //lê o número que está no começo do arquivo e incrementa
+        int qtd;
+        fscanf(f, "%d", &qtd);
+        qtd++;
+
+        //sobreescreve a primeira linha com o novo número
+        fseek(f, 0, SEEK_SET); //parâmetros (o arquiv, quanto bytes andar (esq/dir), e de onde ele deve começar a andar)
+        fprintf(f, "%d", qtd);
+        /*  SEEK_SET - informa ao ponteiro para ficar na posição corrent. 
+            SEEK_CUR - informa ao ponteiro para andar a partir do ponto atual.
+            SEEK_END - informa ao ponteiro para andar a partir do fim do arquivo. */
+
+        //adiciona a nova palavra ao final do arquivo
+        fseek(f, 0, SEEK_END);
+        fprintf(f, "\n%s", novaPalavra); //o /n é para quebrar uma linha no final da última palavra
+
+        //fecha o arquivo
+        fclose(f);
+    }
+
+} 
