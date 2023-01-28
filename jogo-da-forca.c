@@ -6,8 +6,8 @@
 
 
 //declarando variável globais
-char palavraSecreta[20];
-char chutes[26];
+char palavraSecreta[TAM_PALAVRA];
+char chutes[TAM_CHUTES];
 int chutesDados = 0;
 
 //função principal
@@ -60,6 +60,16 @@ int jachutou(char letra){
 
 void desenhaforca(){
 
+    printf(" _______        \n");
+    printf(" |/     |       \n");
+    printf(" |     (_)      \n");
+    printf(" |     \\|/     \n");
+    printf(" |      |       \n");
+    printf(" |     / \\     \n");
+    printf(" |              \n");
+    printf("_|___           \n");
+    printf("\n\n");
+
     printf("Voce ja chutou %d vezes.\n", chutesDados);
 
      //loop para imprimir a palavra secreta
@@ -101,31 +111,38 @@ void escolhepalavra(){
     fclose(f);
 }
 
-//função que conta a quantidade de vezes que o jogador erro a letras da palavra secreta
-int enforcou(){
+//verifica se a letra chutada faz parte da palavra secreta
+int letraExiste(char letra){
+
+    for(int i = 0; i < strlen(palavraSecreta); i++){
+        if(letra == palavraSecreta[i]){
+            return 1;
+        }
+    
+    }
+    return 0;
+}
+
+//conta a quantidade de chutes errados
+int chutesErrados(){
 
     int erros = 0; //false
 
     //loop em todos os chutes dados
-    for(int i = 0; i < chutesDados; i++){
-        
-        int existe = 0; //false - palavra não encontrada
+    for(int i = 0; i < chutesDados; i++){   
 
-        //verifica se a letra chutada faz parte da palavra secreta
-        for(int j = 0; j < strlen(palavraSecreta); j++){
-            if(chutes[i] == palavraSecreta[j]){
-                existe = 1; //true - a palavra foi encontrada
-                break;
-            }
+        if(!letraExiste(chutes[i])){
+            erros++;
         }
-
-        //se a letra chutada não esta contido na palavra secreta, a variável erros é incrementada em 1
-        if(!existe) erros++;
-        
     }
-    
-    //retorna 1 se o limite de erros for maior do que 5. Se for menor, retorna 0
-    return erros >= 5;
+    return erros;      
+}
+
+//informa a quantidade de tentativas
+int enforcou(){
+
+    return chutesErrados() >= 5;
+
 }
 
 //verifica se o jogador acertou todos os chutes
@@ -149,7 +166,7 @@ void adicionaPalavra() {
     scanf(" %c", &quer);
 
     if(quer == 'S') {
-        char novaPalavra[20];
+        char novaPalavra[TAM_PALAVRA];
 
         printf("Digite a nova palavra, em letras maiusculas: ");
         scanf("%s", novaPalavra);
