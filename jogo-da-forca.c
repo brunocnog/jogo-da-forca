@@ -1,26 +1,16 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h> //adicionado por conta da função exit()
+#include <time.h> //adicionado para escolher a palavra secreta de forma randomica
+#include "jogo-da-forca.h"
 
-#define 
 
 //declarando variável globais
-char palavrasecreta[20];
+char palavraSecreta[20];
 char chutes[26];
-int tentativas = 0;
+int chutesDados = 0;
 
-//protótipo das funções
-void abertura ();
-
-void escolhepalavra();
-
-void chuta();
-
-int jachutou(char letra);
-
-void desenhaforca();
-
-int enforcou();
-
+//função principal
 int main(){
     
     int acertou = 0;
@@ -35,10 +25,7 @@ int main(){
 
         chuta();
 
-    } while (!acertou && !enforcou());
-    
-    printf("\n");
-    printf("Voce erros mais de 5 vezes. Obrigado por jogar.");
+    } while (!ganhou() && !enforcou());    
 }
 
 /* FUNÇÕES */
@@ -48,42 +35,40 @@ void abertura (){
     printf("*     Jogo da Forca    *\n");
     printf("************************\n\n");
 }
-
+//função para imprimir e armazenar o chute do jogador, incrementando a variável chutesDados ao final
 void chuta(){    
 
-    //imprimei o chute do jogador
     char chute;        
     printf("Digite uma letra: ");
     scanf(" %c", &chute);
 
-    //array de char para armazenar os chutes do jogador
-    chutes[tentativas] = chute;
-    tentativas++;
+    chutes[chutesDados] = chute;
+    chutesDados++;
 }
 
 //verifica se o jogador já chutou determinada letra
 int jachutou(char letra){
 
-    int achou = 0;
+    int achou = 0; //false
 
-    for(int j = 0; j < tentativas; j++){
+    for(int j = 0; j < chutesDados; j++){
         if(chutes[j] == letra){
             achou = 1;
             break;
         }
     }
-    return achou;
+    return achou; //retornar 0 ou 1
 }
 
 void desenhaforca(){
 
-    printf("Voce ja chutou %d vezes, sendo %d/ erradas.\n", tentativas);
+    printf("Voce ja chutou %d vezes.\n", chutesDados);
 
      //loop para imprimir a palavra secreta
-        for(int i = 0; i <strlen(palavrasecreta); i++){
+        for(int i = 0; i <strlen(palavraSecreta); i++){
 
-           if(jachutou(palavrasecreta[i])){
-                printf("%c ", palavrasecreta[i]);
+           if(jachutou(palavraSecreta[i])){
+                printf("%c ", palavraSecreta[i]);
            }else {
                 printf("_ ");
             }
@@ -94,8 +79,26 @@ void desenhaforca(){
 void escolhepalavra(){
 
     //tem a mesma função do printf, contudo ao invez de imprimir na tela, armazena os caracteres no buffer
-    sprintf(palavrasecreta, "MELANCIA");
+    //sprintf(palavraSecreta, "MELANCIA");
 
+    FILE *f;
+    f = fopen("palavras.txt", "r");
+    if(f == 0){
+        printf("Banco de dados de palavras nao disponivel\n\n");
+        exit(1);
+    }
+
+    int qtdPalavras;
+    fscanf(f, "%d", &qtdPalavras);
+
+    srand(time(0));
+    int randomico = rand() % qtdPalavras;
+
+    for (int i = 0; i <= randomico; i++){
+        fscanf(f, "%s", palavraSecreta);
+    }
+
+    fclose(f);
 }
 
 //função que conta a quantidade de vezes que o jogador erro a letras da palavra secreta
@@ -104,13 +107,13 @@ int enforcou(){
     int erros = 0; //false
 
     //loop em todos os chutes dados
-    for(int i = 0; i < tentativas; i++){
+    for(int i = 0; i < chutesDados; i++){
         
         int existe = 0; //false - palavra não encontrada
 
         //verifica se a letra chutada faz parte da palavra secreta
-        for(int j = 0; j < strlen(palavrasecreta); j++){
-            if(chutes[i] == palavrasecreta[j]){
+        for(int j = 0; j < strlen(palavraSecreta); j++){
+            if(chutes[i] == palavraSecreta[j]){
                 existe = 1; //true - a palavra foi encontrada
                 break;
             }
@@ -118,9 +121,22 @@ int enforcou(){
 
         //se a letra chutada não esta contido na palavra secreta, a variável erros é incrementada em 1
         if(!existe) erros++;
-
+        
     }
-
+    
     //retorna 1 se o limite de erros for maior do que 5. Se for menor, retorna 0
     return erros >= 5;
+}
+
+//verifica se o jogador acertou todos os chutes
+int ganhou(){
+
+    for(int i = 0; i < strlen(palavraSecreta); i++){
+        if(!jachutou(palavraSecreta[i])){
+            return 0;
+        }
+    }
+    printf("\n");
+    printf("Parabens, voce ganhou!!");
+    return 1;
 }
